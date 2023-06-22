@@ -1,0 +1,3 @@
+DB_PASSWORD=<mongo atlas cloud database password>
+DB_NAME=<your database name>
+PORT=<your port>
