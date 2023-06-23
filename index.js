@@ -23,14 +23,14 @@ require('./db/config')
 
 const auth = (req, res, next) => {
     try {
-        const token = req.get('authorization').split('Bearer ')[1];
+        const token = req.get('Authorization').split('Bearer ')[1];
         console.log(token);
         var decoded = jwt.verify(token, process.env.SECRET_KEY);
         console.log(decoded);
         if (decoded.email) {
             next()
         } else {
-            res.sendStatus(401);
+            res.status(401).json('Unauthorized');
         }
     } catch (error) {
         res.status(401).json(error)
