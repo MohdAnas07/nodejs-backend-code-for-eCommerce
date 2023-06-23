@@ -3,7 +3,7 @@ const express = require('express');
 require('dotenv').config(); // config environment variable to use
 const cors = require('cors')
 const app = express();
-const PORT = process.env.PORT || 80
+const PORT = process.env.PORT
 
 const productsRouter = require('./routes/product');
 const usersRouter = require('./routes/user');

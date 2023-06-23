@@ -1,5 +1,6 @@
 const model = require('../model/user');
 const User = model.User;
+const jwt = require('jsonwebtoken');
 
 
 
@@ -36,6 +37,10 @@ exports.getUser = async (req, res) => {
 // Create a Product
 exports.createUser = async (req, res) => {
     const newUser = new User(req.body)
+
+    const token = jwt.sign({ email: req.body.email }, 'shhhhh');
+    newUser.token = token;
+
     try {
         const savedUser = await newUser.save()
         res.status(200).json(savedUser);
