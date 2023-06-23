@@ -1,50 +1,67 @@
-const data = require('../data.json')
-const { users } = data;
-// console.log(users);
+const model = require('../model/user');
+const User = model.User;
 
 
-// Get all users
-exports.getUsers = (req, res) => {
-    res.status(200).json(users)
-}
 
-// GET Single user
-exports.getUser = (req, res) => {
-    const id = +req.params.id
-    console.log(id);
-    const user = users.find(p => p.id === id)
-    res.status(200).json(user)
-}
-
-// Create a user
-exports.createUser = (req, res) => {
-    const newUser = req.body
-    const user = users.find(p => p.id === newUser.id)
-
-    if (user) {
-        res.status(201).json('users already exist!')
-    } else {
-        users.push(newUser)
-        res.status(200).json('new user added')
+// Get all products
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await User.find({});
+        if (users) {
+            res.status(200).json(users)
+        } else {
+            res.status(400).json('no user found')
+        }
+    } catch (error) {
+        res.status(400).json(error)
     }
 }
 
-// Update a user
-exports.updateUser = (req, res) => {
-    const id = +req.params.id
-    // const updateData = req.body;
-    const userIndex = users.findIndex(p => p.id === id)
-    const user = users[userIndex];
-    users.splice(userIndex, 1, { ...user, ...req.body })
-    res.status(200).json('user updated successfuly!')
+// GET Single Product
+exports.getUser = async (req, res) => {
+    const id = req.params.id
+    try {
+        const user = await User.findById(id);
+        if (user) {
+            res.status(200).json(user)
+        } else {
+            res.status(400).json('No user Found')
+        }
+    } catch (error) {
+        res.status(400).json(error)
+    }
 }
 
-// Delete a user
-exports.deleteUser = (req, res) => {
-    const id = +req.params.id
-    console.log(id);
-    const userIndex = users.findIndex(p => p.id === id)
-    const user = users[userIndex];
-    users.splice(userIndex, 1)
-    res.status(200).json(user)
+
+// Create a Product
+exports.createUser = async (req, res) => {
+    const newUser = new User(req.body)
+    try {
+        const savedUser = await newUser.save()
+        res.status(200).json(savedUser);
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+// Update a Product
+exports.updateUser = async (req, res) => {
+    const id = req.params.id
+    try {
+        const doc = await User.findOneAndUpdate({ _id: id }, req.body, { new: true });
+        res.status(200).json(doc);
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+
+// Delete a Product
+exports.deleteUser = async (req, res) => {
+    const id = req.params.id
+    try {
+        const doc = await User.findOneAndDelete({ _id: id });
+        res.status(200).json(doc);
+    } catch (error) {
+        res.status(400).json(error)
+    }
 }   

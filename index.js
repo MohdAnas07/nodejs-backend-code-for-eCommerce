@@ -25,7 +25,6 @@ app.use('/api/products', productsRouter)
 app.use('/api/users', usersRouter)
 
 
-
 // SERVER =======================================>>
 app.listen(PORT, () => {
     console.log(`Server started, running on PORT ${PORT}`)
